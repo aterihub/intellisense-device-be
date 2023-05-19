@@ -1,0 +1,26 @@
+[
+  {
+    "measurement": "power",
+    "tags": {
+      "IP": "192.168.0.1",
+      "deviceName": "device1"
+    },
+    "fields": {
+      "voltage": 200,
+      "current": 2,
+      "va": 400
+    }
+  },
+  {
+    "measurement": "power",
+    "tags": {
+      "IP": "192.168.0.1",
+      "deviceName": "device1"
+    },
+    "fields": {
+      "voltage": 200,
+      "current": 2,
+      "va": 400
+    }
+  }
+]
