@@ -5,12 +5,16 @@ import CreateDeviceValidator from 'App/Validators/Device/CreateDeviceValidator'
 import UpdateDeviceValidator from 'App/Validators/Device/UpdateDeviceValidator'
 
 export default class DevicesController {
-  public async index({ response }: HttpContextContract) {
+  public async index({ response, bouncer }: HttpContextContract) {
+    await bouncer.with('DevicePolicy').authorize('view')
+
     const devices = await Device.query().preload('type')
     return response.ok({ status: 'success', data: { devices } })
   }
 
-  public async store({ response, request }: HttpContextContract) {
+  public async store({ response, request, bouncer }: HttpContextContract) {
+    await bouncer.with('DevicePolicy').authorize('store')
+
     const payload = await request.validate(CreateDeviceValidator)
     const type = await Type.findOrFail(payload.type_id)
 
@@ -22,18 +26,22 @@ export default class DevicesController {
     const device = await type.related('devices').create({
       serialNumber: payload.serial_number,
       fields: payload.fields,
-      notes : payload.notes
+      notes: payload.notes
     })
     return response.ok({ status: 'success', data: { device } })
   }
 
-  public async show({ response, params }: HttpContextContract) {
+  public async show({ response, params, bouncer }: HttpContextContract) {
+    await bouncer.with('DevicePolicy').authorize('view')
+
     const device = await Device.findOrFail(params.id)
     await device?.load('type')
     return response.ok({ status: 'success', data: { device } })
   }
 
-  public async update({ request, response, params }: HttpContextContract) {
+  public async update({ request, response, params, bouncer }: HttpContextContract) {
+    await bouncer.with('DevicePolicy').authorize('update')
+
     const payload = await request.validate(UpdateDeviceValidator)
     const device = await Device.findOrFail(params.id)
     const type = await Type.findOrFail(device.typeId)
@@ -46,13 +54,15 @@ export default class DevicesController {
     await device.merge({
       serialNumber: payload.serial_number != undefined ? payload.serial_number : device.serialNumber,
       fields: payload.fields != undefined ? payload.fields : device.fields,
-      notes : payload.notes != undefined ? payload.notes : device.notes
+      notes: payload.notes != undefined ? payload.notes : device.notes
     }).save()
 
     return response.ok({ status: 'success', data: { device } })
   }
 
-  public async destroy({ response, params }: HttpContextContract) {
+  public async destroy({ response, params, bouncer }: HttpContextContract) {
+    await bouncer.with('DevicePolicy').authorize('destroy')
+
     const device = await Device.findOrFail(params.id)
     await device.delete()
     return response.ok({ status: 'success', data: null })
