@@ -32,6 +32,7 @@ export default class RegisterUserValidator {
       }),
     ]),
     password: schema.string({ trim: true }, [rules.minLength(8), rules.confirmed()]),
+    roleId: schema.enum([1,2,3])
   })
 
   /**

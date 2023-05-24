@@ -102,10 +102,11 @@ test.group('POST/register', (group) => {
       email: 'user@mail.com',
       password: 'secret123',
       password_confirmation: 'secret123',
+      roleId: 2
     }
 
     const response = await client.post('api/v1/register').json(payload)
-
+    
     response.assertStatus(200)
     response.assertBodyContains({
       status: 'success',
