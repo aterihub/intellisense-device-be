@@ -78,3 +78,26 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  pull_the_registery:
+    needs: push_to_registry
+    name: Push Docker image to Server
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          echo "${{ secrets.ENV_FILE_PRODUCTION }}" > .env
+          docker stop intellisense-devicesnet-be
+          docker rm intellisense-devicesnet-be
+
+          docker rmi sigitnurmajid/intellisense-devicesnet-be:main
+          docker pull sigitnurmajid/intellisense-devicesnet-be:main
+
+          docker run -t -d -p 3333:3333 --name intellisense-devicesnet-be sigitnurmajid/intellisense-devicesnet-be:main
