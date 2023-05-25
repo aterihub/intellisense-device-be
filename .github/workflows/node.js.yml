@@ -20,7 +20,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres
+        image: postgres:14-alpine
         env:
           POSTGRES_USER: lucid
           POSTGRES_PASSWORD: 123
@@ -39,9 +39,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
-    
+
     - name: Create env file
       run: |
           echo "${{ secrets.ENV_FILE }}" > .env
-
+          
+    - run: node ace migration:run
     - run: node ace test
