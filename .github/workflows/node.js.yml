@@ -41,7 +41,8 @@ jobs:
     - run: npm ci
     - run: node ace build --production
 
-    - name: Setting up env and run tests
+    - name: Create env file
       run: |
           echo "${{ secrets.ENV_FILE }}" > .env
-      run: node ace test
+          
+    - run: node ace test
