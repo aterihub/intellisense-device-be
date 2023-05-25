@@ -100,4 +100,4 @@ jobs:
           docker rmi sigitnurmajid/intellisense-devicesnet-be:main
           docker pull sigitnurmajid/intellisense-devicesnet-be:main
 
-          docker run -t -d -p 3333:3333 --name intellisense-devicesnet-be sigitnurmajid/intellisense-devicesnet-be:main
+          docker run -t -d -p 3333:3333 --env-file .env --name intellisense-devicesnet-be sigitnurmajid/intellisense-devicesnet-be:main
