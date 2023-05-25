@@ -30,6 +30,8 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+        ports:
+          - 5432:5432
       
     steps:
     - uses: actions/checkout@v3
@@ -38,11 +40,11 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm ci
+    - run: npm i
 
     - name: Create env file
       run: |
-          echo "${{ secrets.ENV_FILE }}" > .env
-          
+        echo "${{ secrets.ENV_FILE }}" > .env
+
     - run: node ace migration:run
     - run: node ace test
