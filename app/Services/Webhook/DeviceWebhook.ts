@@ -1,6 +1,6 @@
 import Device from 'App/Models/Device';
 import Hook from 'App/Models/Hook';
-import got from 'got';
+// import got from 'got';
 import Logger from '@ioc:Adonis/Core/Logger';
 
 type Actions = 'store' | 'update' | 'delete'
@@ -23,19 +23,20 @@ export default class DeviceWebhookService {
       }
     } catch (error) {
       Logger.warn(`Webhook Device ${action} error ${error.message}`)
+      console.log(this.device)
     }
   }
 
   public async store(url: string) {
-    const method = 'POST'
+    return url
   }
 
   public async update(url: string) {
-    const method = 'PUT'
+    return url
 
   }
 
   public async delete(url: string) {
-    const method = 'DELETE'
+    return url
   }
 }
