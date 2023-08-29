@@ -5,10 +5,9 @@ export default class extends BaseSchema {
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.string('id').primary()
       table.string('serial_number').unique()
-      table.integer('type_id')
-        .unsigned()
+      table.string('type_id')
         .references('types.id')
       table.json('fields')
       table.text('notes')

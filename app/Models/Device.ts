@@ -1,10 +1,11 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, beforeCreate, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Type from './Type'
+import { createId } from '@paralleldrive/cuid2'
 
 export default class Device extends BaseModel {
   @column({ isPrimary: true })
-  public id: number
+  public id: string
 
   @column()
   public serialNumber: string
@@ -16,7 +17,7 @@ export default class Device extends BaseModel {
   public notes: string
 
   @column({ serializeAs: null })
-  public typeId: number
+  public typeId: string
 
   @column.dateTime({ autoCreate: true, serializeAs: null })
   public createdAt: DateTime
@@ -26,4 +27,9 @@ export default class Device extends BaseModel {
 
   @belongsTo(() => Type)
   public type: BelongsTo<typeof Type>
+
+  @beforeCreate()
+  public static async cuid(device : Device) {
+    device.id = createId()
+  }
 }

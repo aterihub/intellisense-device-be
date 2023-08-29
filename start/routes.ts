@@ -37,6 +37,12 @@ Route.group(() => {
     Route.resource('types', 'TypesController').middleware({
       '*': 'auth'
     }).apiOnly()
+    Route.resource('gateways', 'GatewaysController').middleware({
+      '*': 'auth'
+    }).apiOnly()
+    Route.resource('hooks', 'HooksController').middleware({
+      '*': 'auth'
+    }).apiOnly()
   }).prefix('v1')
 }).prefix('api')
 

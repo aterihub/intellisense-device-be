@@ -1,7 +1,7 @@
 import { schema, CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class CreateDeviceValidator {
+export default class CreateHookValidator {
   constructor(protected ctx: HttpContextContract) { }
 
   /*
@@ -24,16 +24,10 @@ export default class CreateDeviceValidator {
    *    ```
    */
   public schema = schema.create({
-    type_id: schema.string([
-      rules.exists({ table: 'types', column: 'id' })
+    module: schema.enum(['Gateway', 'Device'], [
+      rules.unique({ table: 'hooks', column: 'module' })
     ]),
-    serial_number: schema.string({ trim: true }, [
-      rules.unique({ table: 'devices', column: 'serial_number' })
-    ]),
-    fields: schema.object().anyMembers(),
-    notes: schema.string([
-      rules.maxLength(100)
-    ])
+    url: schema.string({ trim: true })
   })
 
   /**
@@ -47,8 +41,5 @@ export default class CreateDeviceValidator {
    * }
    *
    */
-  public messages: CustomMessages = {
-    'type_id.exists' : 'Type not found',
-    'name.unique' : 'Device name must be unique'
-  }
+  public messages: CustomMessages = {}
 }

@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Device from 'App/Models/Device'
 import Type from 'App/Models/Type'
+import DeviceWebhookService from 'App/Services/Webhook/DeviceWebhook'
 import CreateDeviceValidator from 'App/Validators/Device/CreateDeviceValidator'
 import UpdateDeviceValidator from 'App/Validators/Device/UpdateDeviceValidator'
 
@@ -28,6 +29,8 @@ export default class DevicesController {
       fields: payload.fields,
       notes: payload.notes
     })
+    new DeviceWebhookService(device).hook('store')
+
     return response.ok({ status: 'success', data: { device } })
   }
 
@@ -57,6 +60,7 @@ export default class DevicesController {
       notes: payload.notes != undefined ? payload.notes : device.notes
     }).save()
 
+    new DeviceWebhookService(device).hook('update')
     return response.ok({ status: 'success', data: { device } })
   }
 
@@ -65,6 +69,8 @@ export default class DevicesController {
 
     const device = await Device.findOrFail(params.id)
     await device.delete()
+
+    new DeviceWebhookService(device).hook('delete')
     return response.ok({ status: 'success', data: null })
   }
 }

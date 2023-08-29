@@ -1,14 +1,13 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'types'
+  protected tableName = 'hooks'
 
-  public async up () {
+  public async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.string('id').primary()
-      table.string('name')
-      table.json('fields')
-      table.text('notes')
+      table.string('module').primary()
+      table.string('url')
+      table.boolean('is_enable').defaultTo(false).notNullable( )
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
@@ -18,7 +17,7 @@ export default class extends BaseSchema {
     })
   }
 
-  public async down () {
+  public async down() {
     this.schema.dropTable(this.tableName)
   }
 }
