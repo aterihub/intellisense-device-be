@@ -68,9 +68,9 @@ export default class DevicesController {
     await bouncer.with('DevicePolicy').authorize('destroy')
 
     const device = await Device.findOrFail(params.id)
+    new DeviceWebhookService(device).hook('delete')
     await device.delete()
 
-    new DeviceWebhookService(device).hook('delete')
     return response.ok({ status: 'success', data: null })
   }
 }

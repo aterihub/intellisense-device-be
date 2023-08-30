@@ -46,8 +46,8 @@ export default class GatewaysController {
     await bouncer.with('GatewayPolicy').authorize('destroy')
 
     const gateway = await Gateway.findOrFail(params.id)
-    await gateway.delete()
     new GatewayWebhookService(gateway).hook('delete')
+    await gateway.delete()
 
     return response.ok({ status: 'success', data: null })
   }
