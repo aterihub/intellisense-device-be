@@ -43,7 +43,7 @@ export default class DeviceWebhookService {
         name: this.device.fields.name,
         type: this.device.type.name,
         manufacture: this.device.fields.manufacture,
-        ipaddress: this.device.fields.ipaddress
+        ipaddress: this.device.fields.ip_address
       },
     }
     Logger.debug(`HTTP Request: POST '${url}' webhook ${this.action} action.`)
